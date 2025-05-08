@@ -15,7 +15,8 @@ class StudentController extends Controller
      */
     public function index(): View
     {
-        //
+        $students = Student::all();
+        return view ('students.index')->with('students', $students);
     }
 
     /**
@@ -23,15 +24,18 @@ class StudentController extends Controller
      */
     public function create()
     {
-        //
+        return view('students.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        //
+        
+        $input = $request->all();
+        Student::create($input);
+        return redirect('students')->with('flash_message', 'Student Addedd!');
     }
 
     /**
