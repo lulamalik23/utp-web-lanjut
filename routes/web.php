@@ -5,6 +5,7 @@ use App\Http\controllers\StudentController;
 use App\Http\controllers\TeacherController;
 use App\Http\controllers\CourseController;
 use App\Http\controllers\BatchController;
+use App\Http\controllers\EnrollmentController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -27,4 +28,6 @@ Route::resource('/teachers', TeacherController::class);
 Route::resource('/courses', CourseController::class);
 
 Route::resource('/batches', BatchController::class);
+
+Route::resource('/enrollments', EnrollmentController::class);
 
