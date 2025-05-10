@@ -1,5 +1,4 @@
 <?php
-
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,6 +16,12 @@ return new class extends Migration
             $table->date('paid_date');
             $table->double('amount');
             $table->timestamps();
+
+            // FOREIGN KEY dengan ON DELETE CASCADE
+            $table->foreign('enrollment_id')
+                  ->references('id')
+                  ->on('enrollments')
+                  ->onDelete('cascade');
         });
     }
 

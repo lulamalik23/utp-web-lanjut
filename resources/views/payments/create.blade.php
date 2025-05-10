@@ -5,14 +5,14 @@
   <div class="card-header">Payments</div>
   <div class="card-body">
       
-      <form action="{{ url('batches') }}" method="post">
+      <form action="{{ url('payments') }}" method="post">
       {!! csrf_field() !!}
       <label>Enrollment No</label></br>
         
 
-        <select name="enrollment_id" id="enrollment_id" class="form-control">
-        @foreach($payments as $id => $enrollno)
-            <option value="{{ $id }}">{{ $enrollno }}</option>
+        <select name="enroll_id" id="enroll_id" class="form-control">
+        @foreach($enrollments as $id => $enroll_no)
+            <option value="{{ $id }}">{{ $enroll_no }}</option>
         @endforeach
     </select>
 

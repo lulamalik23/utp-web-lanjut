@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Payment;
-
+use App\Models\Enrollment;
 class paymentController extends Controller
 {
     /**
@@ -21,8 +21,9 @@ class paymentController extends Controller
      */
     public function create()
     {
-        $payments = Payment::pluck('enroll_no', 'id');
-        return view('payments.create', compact('payments'));
+       
+        $enrollments = Enrollment::pluck('enroll_no', 'id');
+        return view('payments.create', compact('enrollments'));
     }
 
     /**
@@ -49,8 +50,10 @@ class paymentController extends Controller
      */
     public function edit(string $id)
     {
+
         $payments = Payment::find($id);
-        return view('payments.edit')->with('payments', $payments);
+        $enrollments = Enrollment::pluck('enroll_no', 'id');
+        return view('payments.edit', compact('payments', 'enrollments'));
     }
 
     /**
@@ -69,8 +72,10 @@ class paymentController extends Controller
      */
     public function destroy(string $id)
     {
-        Payment::destroy($id);
-        return redirect('payments')->with('flash_message', 'Payment deleted!'); 
+       $payment = Payment::findOrFail($id);
+       $payment->delete();
+
+    return redirect()->route('payments.index')->with('success', 'Payment deleted successfully.');
     }
 
     }
