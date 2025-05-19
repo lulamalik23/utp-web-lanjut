@@ -1,32 +1,37 @@
 @extends('layout')
+
 @section('content')
- 
+
 <div class="card">
-  <div class="card-header">Payments</div>
+  <div class="card-header">Add New Payment</div>
   <div class="card-body">
-      
-      <form action="{{ url('payments') }}" method="post">
-      {!! csrf_field() !!}
-      <label>Enrollment No</label></br>
-        
 
-        <select name="enroll_id" id="enroll_id" class="form-control">
-        @foreach($enrollments as $id => $enroll_no)
+    <form action="{{ url('payments') }}" method="POST">
+      @csrf
+
+      <div class="form-group">
+        <label for="enrollment_id">Enrollment No</label>
+        <select name="enrollment_id" id="enrollment_id" class="form-control">
+          @foreach($enrollments as $id => $enroll_no)
             <option value="{{ $id }}">{{ $enroll_no }}</option>
-        @endforeach
-    </select>
+          @endforeach
+        </select>
+      </div>
 
-    <label>Paid Date</label><br>
-    <!-- <input type="text" name="course_id" id="course_id" class="form-control"/><br> -->
-    <input type="text" name="paid_date" id="name" class="form-control"/><br>
+      <div class="form-group">
+        <label for="paid_date">Paid Date</label>
+        <input type="date" name="paid_date" id="paid_date" class="form-control"/>
+      </div>
 
-    <label>Amount</label><br>
-    <input type="text" name="amount" id="amount" class="form-control"/><br>
-    
-    <input type="submit" value="Save" class="btn btn-success"/>
-      </form>
-   
+      <div class="form-group">
+        <label for="amount">Amount</label>
+        <input type="text" name="amount" id="amount" class="form-control"/>
+      </div>
+
+      <button type="submit" class="btn btn-success">Save</button>
+    </form>
+
   </div>
 </div>
- 
-@stop
+
+@endsection

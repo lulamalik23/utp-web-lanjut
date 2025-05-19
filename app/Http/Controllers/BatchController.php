@@ -58,8 +58,9 @@ class BatchController extends Controller
      */
     public function edit(string $id): View
     {
-        $batches = Batch::find($id);
-        return view('batches.edit')->with('batches', $batches);
+        $batches = Batch::findOrFail($id);
+        $courses = Course::all(); // Atau: Course::pluck('name', 'id')
+        return view('batches.edit', compact('batches', 'courses'));
     }
 
     /**

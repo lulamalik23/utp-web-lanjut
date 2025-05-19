@@ -16,17 +16,24 @@ class PaymentController extends Controller
     }
 
     public function create()
-    {
-        $enrollments = Enrollment::pluck('enroll_no', 'id');
-        return view('payments.create', compact('enrollments'));
-    }
+{
+    $enrollments = Enrollment::pluck('enroll_no', 'id');
+    return view('payments.create', compact('enrollments'));
+}
 
-    public function store(Request $request)
-    {
-        $input = $request->all();
-        Payment::create($input);
-        return redirect('payments')->with('flash_message', 'Payment Added!');
-    }
+public function store(Request $request)
+{
+    $request->validate([
+        'enrollment_id' => 'required|exists:enrollments,id',
+        'paid_date' => 'required|date',
+        'amount' => 'required|numeric',
+    ]);
+
+    Payment::create($request->all());
+
+    return redirect('payments')->with('flash_message', 'Payment Added!');
+}
+
 
     public function show($id)
     {

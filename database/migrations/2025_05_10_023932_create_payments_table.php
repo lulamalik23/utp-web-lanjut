@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,10 +15,9 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('enrollment_id');
             $table->date('paid_date');
-            $table->double('amount');
+            $table->decimal('amount', 10, 2); // lebih tepat pakai decimal untuk nilai uang
             $table->timestamps();
 
-            // FOREIGN KEY dengan ON DELETE CASCADE
             $table->foreign('enrollment_id')
                   ->references('id')
                   ->on('enrollments')
