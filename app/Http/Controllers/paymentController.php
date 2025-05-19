@@ -5,60 +5,42 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Payment;
 use App\Models\Enrollment;
-class paymentController extends Controller
+use Illuminate\Support\Facades\App;
+
+class PaymentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        $payments= Payment::all();
-        return view ('payments.index')->with('payments', $payments);
+        $payments = Payment::with('enrollment')->get();
+        return view('payments.index', compact('payments'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-       
         $enrollments = Enrollment::pluck('enroll_no', 'id');
         return view('payments.create', compact('enrollments'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $input = $request->all();
         Payment::create($input);
-        return redirect('payments')->with('flash_message', 'Payment Addedd!');
+        return redirect('payments')->with('flash_message', 'Payment Added!');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show($id)
     {
-        $payments = Payment::find($id);
-        return view('payments.show')->with('payments', $payments);
+        $item = Payment::with('enrollment')->findOrFail($id);
+        return view('payments.show', compact('item'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
-
         $payments = Payment::find($id);
         $enrollments = Enrollment::pluck('enroll_no', 'id');
         return view('payments.edit', compact('payments', 'enrollments'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
         $payments = Payment::find($id);
@@ -67,16 +49,22 @@ class paymentController extends Controller
         return redirect('payments')->with('flash_message', 'Payment Updated!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
-       $payment = Payment::findOrFail($id);
-       $payment->delete();
-
-    return redirect()->route('payments.index')->with('success', 'Payment deleted successfully.');
+        $payment = Payment::findOrFail($id);
+        $payment->delete();
+        return redirect()->route('payments.index')->with('success', 'Payment deleted successfully.');
     }
 
-    }
+    public function print($id)
+    {
+        // ✅ Perbaikan relasi eager loading
+        $payment = Payment::with(['enrollment.student', 'enrollment.batch'])->findOrFail($id);
 
+        $pdf = App::make('dompdf.wrapper');
+        $pdf->loadView('payments.receipt', compact('payment'));
+
+        return response($pdf->output(), 200)
+            ->header('Content-Type', 'application/pdf');
+    }
+}

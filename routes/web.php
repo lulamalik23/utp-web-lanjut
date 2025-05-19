@@ -7,6 +7,7 @@ use App\Http\controllers\CourseController;
 use App\Http\controllers\BatchController;
 use App\Http\controllers\EnrollmentController;
 use App\Http\controllers\PaymentController;
+use App\Http\controllers\ReportController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -33,3 +34,13 @@ Route::resource('/batches', BatchController::class);
 Route::resource('/enrollments', EnrollmentController::class);
 
 Route::resource('/payments', PaymentController::class);
+
+ Route::get('report/report1/{pid}', [ReportController::class, 'report1']);
+
+Route::get('/report/report/{id}', [ReportController::class, 'show'])->name('report.print');
+
+Route::get('/report/{id}', [ReportController::class, 'report'])->name('report.pdf');
+
+
+
+ 
